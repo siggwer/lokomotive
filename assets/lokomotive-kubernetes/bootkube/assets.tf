@@ -1,6 +1,6 @@
 # Self-hosted Kubernetes bootstrap-manifests
 resource "template_dir" "bootstrap-manifests" {
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/bootstrap-manifests"
+  source_dir      = "${path.module}/resources/bootstrap-manifests"
   destination_dir = "${var.asset_dir}/bootstrap-manifests"
 
   vars = {
@@ -37,7 +37,7 @@ resource "local_file" "kube-apiserver" {
 }
 
 resource "template_dir" "kube-apiserver" {
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/charts/kube-apiserver"
+  source_dir      = "${path.module}/resources/charts/kube-apiserver"
   destination_dir = "${var.asset_dir}/charts/kube-system/kube-apiserver"
 }
 
@@ -51,7 +51,7 @@ resource "local_file" "kubernetes" {
 # TODO: Currently, there is no way in Terraform to copy local directory, so we use `template_dir` for it.
 # The downside is, that any Terraform templating syntax stored in this directory will be evaluated, which may bring unexpected results.
 resource "template_dir" "kubernetes" {
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/charts/kubernetes"
+  source_dir      = "${path.module}/resources/charts/kubernetes"
   destination_dir = "${var.asset_dir}/charts/kube-system/kubernetes"
 }
 
@@ -97,7 +97,7 @@ resource "local_file" "kubelet" {
 # TODO: Currently, there is no way in Terraform to copy local directory, so we use `template_dir` for it.
 # The downside is, that any Terraform templating syntax stored in this directory will be evaluated, which may bring unexpected results.
 resource "template_dir" "kubelet" {
-  source_dir = "${replace(path.module, path.cwd, ".")}/resources/charts/kubelet"
+  source_dir = "${path.module}/resources/charts/kubelet"
   destination_dir = "${var.asset_dir}/charts/kube-system/kubelet"
 }
 

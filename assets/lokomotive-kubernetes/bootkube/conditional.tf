@@ -16,7 +16,7 @@ resource "local_file" "flannel" {
 # The downside is, that any Terraform templating syntax stored in this directory will be evaluated, which may bring unexpected results.
 resource "template_dir" "flannel" {
   count           = var.networking == "flannel" ? 1 : 0
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/charts/flannel"
+  source_dir      = "${path.module}/resources/charts/flannel"
   destination_dir = "${var.asset_dir}/charts/kube-system/flannel"
 }
 
@@ -55,7 +55,7 @@ resource "local_file" "calico" {
 # The downside is, that any Terraform templating syntax stored in this directory will be evaluated, which may bring unexpected results.
 resource "template_dir" "calico" {
   count           = var.networking == "calico" ? 1 : 0
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/charts/calico"
+  source_dir      = "${path.module}/resources/charts/calico"
   destination_dir = "${var.asset_dir}/charts/kube-system/calico"
 }
 
@@ -94,7 +94,7 @@ resource "local_file" "kube-router" {
 # The downside is, that any Terraform templating syntax stored in this directory will be evaluated, which may bring unexpected results.
 resource "template_dir" "kube-router" {
   count           = var.networking == "kube-router" ? 1 : 0
-  source_dir      = "${replace(path.module, path.cwd, ".")}/resources/charts/kube-router"
+  source_dir      = "${path.module}/resources/charts/kube-router"
   destination_dir = "${var.asset_dir}/charts/kube-system/kube-router"
 }
 
