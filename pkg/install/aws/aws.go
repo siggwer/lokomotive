@@ -62,6 +62,7 @@ type config struct {
 	ClusterDomainSuffix      string            `hcl:"cluster_domain_suffix,optional"`
 	EnableReporting          bool              `hcl:"enable_reporting,optional"`
 	CertsValidityPeriodHours int               `hcl:"certs_validity_period_hours,optional"`
+	CloudProvider            string            `hcl:cloud_provider,optional`
 }
 
 // init registers aws as a platform

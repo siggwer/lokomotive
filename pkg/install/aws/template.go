@@ -33,6 +33,9 @@ module "aws-{{.Config.ClusterName}}" {
   {{- if .Config.ClusterDomainSuffix }}
   cluster_domain_suffix = "{{.Config.ClusterDomainSuffix}}"
   {{- end }}
+  {{- if .Config.CloudProvider }}
+  cloud_provider = "{{.Config.CloudProvider}}"
+  {{- end}}
 
   ssh_keys  = {{$.SSHPublicKeys}}
   asset_dir = "../cluster-assets"
