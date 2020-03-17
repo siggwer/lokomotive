@@ -24,4 +24,6 @@ module "bootkube" {
   container_arch = var.os_arch
 
   expose_on_all_interfaces = true
+
+  kube_apiserver_extra_flags = var.kube_apiserver_extra_flags
 }

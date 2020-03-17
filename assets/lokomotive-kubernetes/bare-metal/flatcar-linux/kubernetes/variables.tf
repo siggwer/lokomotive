@@ -162,3 +162,9 @@ variable "certs_validity_period_hours" {
   type        = number
   default     = 8760
 }
+
+variable "kube_apiserver_extra_flags" {
+  description = "Extra flags passed to self-hosted kube-apiserver."
+  type        = list(string)
+  default     = []
+}

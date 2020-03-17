@@ -44,6 +44,7 @@ variable "management_cidrs" {}
 variable "node_private_cidr" {}
 variable "state_s3_bucket" {}
 variable "lock_dynamodb_table" {}
+variable "kube_apiserver_extra_flags" {}
 
 backend "s3" {
   bucket         = var.state_s3_bucket
@@ -121,6 +122,8 @@ cluster "packet" {
   reservation_ids_default = ""
 
   certs_validity_period_hours = 8760
+
+  kube_apiserver_extra_flags = var.kube_apiserver_extra_flags
 
   worker_pool "worker-pool-1" {
     count = var.workers_count
@@ -210,6 +213,7 @@ node_type = var.custom_default_worker_type
 | `reservation_ids`                     | Specify Packet hardware reservation ID for instances.                                                                                                                         | -               | false    |
 | `reservation_ids_default`             | Default reservation ID for nodes not listed in the `reservation_ids`. The value`next-available` will choose any reservation that matches the pool's device type and facility. | ""              | false    |
 | `certs_validity_period_hours`         | Validity of all the certificates in hours.                                                                                                                                    | 8760            | false    |
+| `kube_apiserver_extra_flags`          | Extra flags passed to self-hosted kube-apiserver.      | []              | false    |
 | `worker_pool`                         | Configuration block for worker pools. There can be more than one.                                                                                                             | -               | true     |
 | `worker_pool.count`                   | Number of workers in the worker pool. Can be changed afterwards to add or delete workers.                                                                                     | 1               | true     |
 | `worker_pool.disable_bgp`             | Disable BGP on nodes. Nodes won't be able to connect to Packet BGP peers.                                                                                                     | false           | false    |

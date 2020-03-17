@@ -74,6 +74,7 @@ type config struct {
 	EnableReporting          bool              `hcl:"enable_reporting,optional"`
 	CertsValidityPeriodHours int               `hcl:"certs_validity_period_hours,optional"`
 	WorkerPools              []workerPool      `hcl:"worker_pool,block"`
+	KubeAPIServerExtraFlags  []string          `hcl:"kube_apiserver_extra_flags,optional"`
 }
 
 // init registers aws as a platform
@@ -158,6 +159,11 @@ func createTerraformConfigFile(cfg *config, terraformRootDir string) error {
 		return errors.Wrapf(err, "failed to marshal CLC snippets")
 	}
 
+	kubeAPIServerExtraFlags, err := json.Marshal(cfg.KubeAPIServerExtraFlags)
+	if err != nil {
+		return fmt.Errorf("failed to marshal kube-apiserver extra flags: %w", err)
+	}
+
 	util.AppendTags(&cfg.Tags)
 
 	tags, err := json.Marshal(cfg.Tags)
@@ -190,19 +196,21 @@ func createTerraformConfigFile(cfg *config, terraformRootDir string) error {
 	}
 
 	terraformCfg := struct {
-		Config                config
-		Tags                  string
-		SSHPublicKeys         string
-		ControllerCLCSnippets string
-		WorkerCLCSnippets     string
-		WorkerTargetGroups    string
-		WorkerpoolCfg         []map[string]string
+		Config                  config
+		Tags                    string
+		SSHPublicKeys           string
+		ControllerCLCSnippets   string
+		WorkerCLCSnippets       string
+		WorkerTargetGroups      string
+		WorkerpoolCfg           []map[string]string
+		KubeAPIServerExtraFlags string
 	}{
-		Config:                *cfg,
-		Tags:                  string(tags),
-		SSHPublicKeys:         string(keyListBytes),
-		ControllerCLCSnippets: string(controllerCLCSnippetsBytes),
-		WorkerpoolCfg:         workerpoolCfgList,
+		Config:                  *cfg,
+		Tags:                    string(tags),
+		SSHPublicKeys:           string(keyListBytes),
+		ControllerCLCSnippets:   string(controllerCLCSnippetsBytes),
+		WorkerpoolCfg:           workerpoolCfgList,
+		KubeAPIServerExtraFlags: string(kubeAPIServerExtraFlags),
 	}
 
 	if err := t.Execute(f, terraformCfg); err != nil {

@@ -250,20 +250,18 @@ Configuring an API server to use the OpenID Connect authentication plugin requir
 
 * Dex is accessible to both your browser and the Kubernetes API server.
 
-To reconfigure the API server with specific flags, edit the `kube-apiserver` DaemonSet as follows:
+To reconfigure the API server with specific flags, add following snippet to your cluster configuration:
+```hcl
+cluster "aws" {
+  ...
 
-```bash
-kubectl -n kube-system edit daemonset kube-apiserver
-```
-
-Add the following CLI arguments to the API server pod:
-
-```bash
---oidc-issuer-url=https://dex.YOUR.CLUSTER.DOMAIN.NAME
---oidc-client-id=gangway
---oidc-username-claim=email
---oidc-groups-claim=groups
-```
+  kube_apiserver_extra_flags = [
+    "--oidc-issuer-url=https://dex.YOUR.CLUSTER.DOMAIN.NAME",
+    "--oidc-client-id=gangway",
+    "--oidc-username-claim=email",
+    "--oidc-groups-claim=groups",
+  }
+}
 
 Set the argument values according to the following table
 
@@ -272,33 +270,10 @@ Set the argument values according to the following table
 | `--oidc-issuer-url`| Value of `issuer_host` in the Dex configuration. |
 | `--oidc-client-id` | The client ID obtained from GitHub in step 2. |
 
-Example:
+To apply configured changes, execute:
 
 ```bash
-    containers:
-    - command:
-      .
-      .
-      .
-      - exec /hyperkube \
-        kube-apiserver \
-        --advertise-address=$(POD_IP) \
-        --allow-privileged=true \
-        --anonymous-auth=false \
-        --authorization-mode=RBAC \
-        .
-        .
-        .
-        --oidc-issuer-url=https://dex.YOUR.CLUSTER.DOMAIN.NAME \
-        --oidc-client-id=gangway \
-        --oidc-username-claim=email \
-        --oidc-groups-claim=groups
-```
-
-It may take a few moments for the API server pods to restart. You can check the status by running the following command:
-
-```bash
-kubectl get pods -n kube-system
+lokoctl cluster apply
 ```
 
 ## Step 6: Authenticate with Gangway (for users)

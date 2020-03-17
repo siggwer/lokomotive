@@ -107,6 +107,9 @@ spec:
           --requestheader-group-headers=X-Remote-Group \
           --requestheader-username-headers=X-Remote-User \
           {{ end -}}
+          {{- range .Values.apiserver.extraFlags -}}
+          {{ . }} \
+          {{- end }}
           --storage-backend=etcd3
         {{- else }}
         - /hyperkube
@@ -140,6 +143,9 @@ spec:
         - --requestheader-extra-headers-prefix=X-Remote-Extra-
         - --requestheader-group-headers=X-Remote-Group
         - --requestheader-username-headers=X-Remote-User
+        {{- end }}
+        {{- range .Values.apiserver.extraFlags -}}
+        - {{ . }}
         {{- end }}
         readinessProbe:
           tcpSocket:

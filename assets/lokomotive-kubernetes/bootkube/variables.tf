@@ -134,3 +134,9 @@ variable "expose_on_all_interfaces" {
   type        = bool
   default     = false
 }
+
+variable "kube_apiserver_extra_flags" {
+  description = "Extra flags passed to self-hosted kube-apiserver."
+  type        = list(string)
+  default     = []
+}

@@ -76,6 +76,7 @@ type config struct {
 	ReservationIDs           map[string]string `hcl:"reservation_ids,optional"`
 	ReservationIDsDefault    string            `hcl:"reservation_ids_default,optional"`
 	CertsValidityPeriodHours int               `hcl:"certs_validity_period_hours,optional"`
+	KubeAPIServerExtraFlags  []string          `hcl:"kube_apiserver_extra_flags,optional"`
 
 	WorkerPools []workerPool `hcl:"worker_pool,block"`
 }
@@ -176,6 +177,11 @@ func createTerraformConfigFile(cfg *config, terraformPath string) error {
 		return errors.Wrapf(err, "failed to marshal management CIDRs")
 	}
 
+	kubeAPIServerExtraFlags, err := json.Marshal(cfg.KubeAPIServerExtraFlags)
+	if err != nil {
+		return fmt.Errorf("failed to marshal kube-apiserver extra flags: %w", err)
+	}
+
 	// Packet does not accept tags as a key-value map but as an array of
 	// strings.
 	util.AppendTags(&cfg.Tags)
@@ -190,15 +196,17 @@ func createTerraformConfigFile(cfg *config, terraformPath string) error {
 	}
 
 	terraformCfg := struct {
-		Config          config
-		Tags            string
-		SSHPublicKeys   string
-		ManagementCIDRs string
+		Config                  config
+		Tags                    string
+		SSHPublicKeys           string
+		ManagementCIDRs         string
+		KubeAPIServerExtraFlags string
 	}{
-		Config:          *cfg,
-		Tags:            string(tags),
-		SSHPublicKeys:   string(keyListBytes),
-		ManagementCIDRs: string(managementCIDRs),
+		Config:                  *cfg,
+		Tags:                    string(tags),
+		SSHPublicKeys:           string(keyListBytes),
+		ManagementCIDRs:         string(managementCIDRs),
+		KubeAPIServerExtraFlags: string(kubeAPIServerExtraFlags),
 	}
 
 	if err := t.Execute(f, terraformCfg); err != nil {

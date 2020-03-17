@@ -90,6 +90,10 @@ module "packet-{{.Config.ClusterName}}" {
   {{- if .Config.CertsValidityPeriodHours }}
   certs_validity_period_hours = {{.Config.CertsValidityPeriodHours}}
   {{- end }}
+
+  {{- if ne .KubeAPIServerExtraFlags "null" }}
+  kube_apiserver_extra_flags = {{ .KubeAPIServerExtraFlags }}
+  {{- end }}
 }
 
 {{ range $index, $pool := .Config.WorkerPools }}

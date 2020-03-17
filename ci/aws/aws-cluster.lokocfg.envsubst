@@ -25,6 +25,11 @@ cluster "aws" {
       "deployment" = "ci"
     }
   }
+
+  # Smoke test for extra flags feature.
+  kube_apiserver_extra_flags = [
+    "-v=1",
+  ]
 }
 
 component "openebs-operator" {}

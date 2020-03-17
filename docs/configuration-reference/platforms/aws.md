@@ -50,6 +50,7 @@ variable "worker_disk_type" {}
 variable "worker_disk_iops" {}
 variable "worker_spot_price" {}
 variable "target_groups" {}
+variable "kube_apiserver_extra_flags" {}
 
 backend "s3" {
   bucket         = var.state_s3_bucket
@@ -140,6 +141,8 @@ cluster "aws" {
       "key" = "value"
     }
   }
+
+  kube_apiserver_extra_flags = var.kube_apiserver_extra_flags
 }
 ```
 
@@ -194,6 +197,7 @@ worker_pool "my-worker-pool" {
 | `cluster_domain_suffix`       | Cluster's DNS domain.                                                                                                                                                                      | "cluster.local" | false    |
 | `enable_reporting`            | Enables usage or analytics reporting to upstream.                                                                                                                                          | false           | false    |
 | `certs_validity_period_hours` | Validity of all the certificates in hours.                                                                                                                                                 | 8760            | false    |
+| `kube_apiserver_extra_flags`  | Extra flags passed to self-hosted kube-apiserver.                                                                                                                                          | []              | false    |
 | `worker_pool`                 | Configuration block for worker pools. There can be more than one. **NOTE**: worker pool name must be unique per DNS zone and region.                                                       | -               | true     |
 | `worker_pool.count`           | Number of workers in the worker pool. Can be changed afterwards to add or delete workers.                                                                                                  | -               | true     |
 | `worker_pool.instance_type`   | AWS instance type for worker nodes.                                                                                                                                                        | "t3.small"      | false    |

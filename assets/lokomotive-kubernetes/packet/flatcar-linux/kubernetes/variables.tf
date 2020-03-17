@@ -175,3 +175,9 @@ variable "tags" {
   type        = list(string)
   default     = ["ManagedBy:Lokomotive", "CreatedBy:Unspecified"]
 }
+
+variable "kube_apiserver_extra_flags" {
+  description = "Extra flags passed to self-hosted kube-apiserver."
+  type        = list(string)
+  default     = []
+}

@@ -46,6 +46,7 @@ variable "management_cidrs" {}
 variable "node_private_cidr" {}
 variable "state_s3_bucket" {}
 variable "lock_dynamodb_table" {}
+variable "kube_apiserver_extra_flags" {}
 
 cluster "bare-metal" {
   asset_dir = var.asset_dir
@@ -83,6 +84,8 @@ cluster "bare-metal" {
   os_version = "current"
 
   os_channel = "flatcar-stable"
+
+  kube_apiserver_extra_flags = var.kube_apiserver_extra_flags
 }
 ```
 
@@ -111,26 +114,27 @@ os_version = var.custom_default_os_version
 
 ## Attribute reference
 
-| Argument                    | Description                                                                                                                                                           | Default          | Required |
-|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------:|:--------:|
-| `asset_dir`                 | Location where Lokomotive stores cluster assets.                                                                                                                      | -                | true     |
-| `cached_install`            | Whether the operating system should PXE boot and install from matchbox /assets cache. Note that the admin must have downloaded the `os_version` into matchbox assets. | "false"          | false    |
-| `cluster_name`              | Name of the cluster.                                                                                                                                                  | -                | true     |
-| `controller_domains`        | Ordered list of controller FQDNs. Example: ["node1.example.com"]                                                                                                      | -                | true     |
-| `controller_macs`           | Ordered list of controller identifying MAC addresses. Example: ["52:54:00:a1:9c:ae"]                                                                                  | -                | true     |
-| `controller_names`          | Ordered list of controller names. Example: ["node1"]                                                                                                                  | -                | true     |
-| `k8s_domain_name`           | Controller DNS name which resolves to a controller instance. Workers and kubeconfig's will communicate with this endpoint. Example: "cluster.example.com"             | -                | true     |
-| `matchbox_ca_path`          | Path to the CA to verify and authenticate client certificates.                                                                                                        | -                | true     |
-| `matchbox_client_cert_path` | Path to the server TLS certificate file.                                                                                                                              | -                | true     |
-| `matchbox_client_key_path`  | Path to the server TLS key file.                                                                                                                                      | -                | true     |
-| `matchbox_endpoint`         | Matchbox API endpoint.                                                                                                                                                | -                | true     |
-| `matchbox_http_endpoint`    | Matchbox HTTP read-only endpoint. Example: "http://matchbox.example.com:8080"                                                                                         | -                | true     |
-| `worker_names`              | Ordered list of worker names. Example: ["node2", "node3"]                                                                                                             | -                | true     |
-| `worker_macs`               | Ordered list of worker identifying MAC addresses. Example ["52:54:00:b2:2f:86", "52:54:00:c3:61:77"]                                                                  | -                | true     |
-| `worker_domains`            | Ordered list of worker FQDNs. Example ["node2.example.com", "node3.example.com"]                                                                                      | -                | true     |
-| `ssh_pubkeys`               | SSH public keys for user `core`.                                                                                                                                      | -                | true     |
-| `os_version`                | Flatcar Container Linux version to install. Version such as "2303.3.1" or "current".                                                                                  | "current"        | false    |
-| `os_channel`                | Flatcar Container Linux channel to install from ("flatcar-stable", "flatcar-beta", "flatcar-alpha", "flatcar-edge").                                                  | "flatcar-stable" | false    |
+| Argument                     | Description                                                                                                                                                           | Default          | Required |
+|------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------:|:--------:|
+| `asset_dir`                  | Location where Lokomotive stores cluster assets.                                                                                                                      | -                | true     |
+| `cached_install`             | Whether the operating system should PXE boot and install from matchbox /assets cache. Note that the admin must have downloaded the `os_version` into matchbox assets. | "false"          | false    |
+| `cluster_name`               | Name of the cluster.                                                                                                                                                  | -                | true     |
+| `controller_domains`         | Ordered list of controller FQDNs. Example: ["node1.example.com"]                                                                                                      | -                | true     |
+| `controller_macs`            | Ordered list of controller identifying MAC addresses. Example: ["52:54:00:a1:9c:ae"]                                                                                  | -                | true     |
+| `controller_names`           | Ordered list of controller names. Example: ["node1"]                                                                                                                  | -                | true     |
+| `k8s_domain_name`            | Controller DNS name which resolves to a controller instance. Workers and kubeconfig's will communicate with this endpoint. Example: "cluster.example.com"             | -                | true     |
+| `matchbox_ca_path`           | Path to the CA to verify and authenticate client certificates.                                                                                                        | -                | true     |
+| `matchbox_client_cert_path`  | Path to the server TLS certificate file.                                                                                                                              | -                | true     |
+| `matchbox_client_key_path`   | Path to the server TLS key file.                                                                                                                                      | -                | true     |
+| `matchbox_endpoint`          | Matchbox API endpoint.                                                                                                                                                | -                | true     |
+| `matchbox_http_endpoint`     | Matchbox HTTP read-only endpoint. Example: "http://matchbox.example.com:8080"                                                                                         | -                | true     |
+| `worker_names`               | Ordered list of worker names. Example: ["node2", "node3"]                                                                                                             | -                | true     |
+| `worker_macs`                | Ordered list of worker identifying MAC addresses. Example ["52:54:00:b2:2f:86", "52:54:00:c3:61:77"]                                                                  | -                | true     |
+| `worker_domains`             | Ordered list of worker FQDNs. Example ["node2.example.com", "node3.example.com"]                                                                                      | -                | true     |
+| `ssh_pubkeys`                | SSH public keys for user `core`.                                                                                                                                      | -                | true     |
+| `os_version`                 | Flatcar Container Linux version to install. Version such as "2303.3.1" or "current".                                                                                  | "current"        | false    |
+| `os_channel`                 | Flatcar Container Linux channel to install from ("flatcar-stable", "flatcar-beta", "flatcar-alpha", "flatcar-edge").                                                  | "flatcar-stable" | false    |
+| `kube_apiserver_extra_flags` | Extra flags passed to self-hosted kube-apiserver.                                                                                                                     | []               | false    |
 
 ## Applying
 

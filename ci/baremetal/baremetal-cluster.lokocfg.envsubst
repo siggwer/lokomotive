@@ -31,4 +31,9 @@ cluster "bare-metal" {
     "node2",
     "node3",
   ]
+
+  # Smoke test for extra flags feature.
+  kube_apiserver_extra_flags = [
+    "-v=1",
+  ]
 }

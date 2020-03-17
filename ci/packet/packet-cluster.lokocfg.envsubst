@@ -26,6 +26,11 @@ cluster "packet" {
     node_type = "c2.medium.x86"
     labels = "testing.io=yes,roleofnode=testing"
   }
+
+  # Smoke test for extra flags feature.
+  kube_apiserver_extra_flags = [
+    "-v=1",
+  ]
 }
 
 component "openebs-operator" {}
