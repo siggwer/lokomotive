@@ -172,6 +172,9 @@ module "worker-{{ $pool.Name }}" {
   {{- if $.Config.ReservationIDsDefault }}
   reservation_ids_default = "{{$.Config.ReservationIDsDefault}}"
   {{- end }}
+
+  management_cidrs  = {{$.ManagementCIDRs}}
+  node_private_cidr = "{{$.Config.NodePrivateCIDR}}"
 }
 {{ end }}
 

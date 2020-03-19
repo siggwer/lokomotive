@@ -169,3 +169,13 @@ variable "tags" {
   type        = list(string)
   default     = ["ManagedBy:Lokomotive", "CreatedBy:Unspecified"]
 }
+
+variable "management_cidrs" {
+  description = "List of IPv4 CIDRs authorized to access or manage the cluster"
+  type        = list(string)
+}
+
+variable "node_private_cidr" {
+  description = "Private IPv4 CIDR of the nodes used to allow inter-node traffic"
+  type        = string
+}

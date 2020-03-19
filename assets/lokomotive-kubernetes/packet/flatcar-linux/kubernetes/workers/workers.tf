@@ -61,6 +61,8 @@ data "ct_config" "ignitions" {
       setup_raid_hdd        = var.setup_raid_hdd
       setup_raid_ssd        = var.setup_raid_ssd
       setup_raid_ssd_fs     = var.setup_raid_ssd_fs
+      management_cidrs      = var.management_cidrs
+      node_private_cidr     = var.node_private_cidr
     }
   )
   platform = "packet"
